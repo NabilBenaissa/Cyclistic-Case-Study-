@@ -58,15 +58,15 @@ Data processing on Excel:
 First, I downloaded the 12 datasets of the year 2022, unzipped the files, and created a folder on my desktop to house the files using appropriate file-naming conventions. 
 
 Then, I opened each .CSV file on Microsoft Excel 365, saved the file as an Excel Workbook file, and cleaned the data.
-Below, you will find the steps that I have taken to clean the data:
-1- Filtered and sorted the data to see if there is any blanks or errors. I found blanks in the following columns:  start_station_name, start_station_id, end_station_name, end_station_id. 
-2- Checked if there are any duplicates, I used the option available on Excel as follow: Data > Remove duplicates. I have found no duplicates.
+Below, you will find the steps that I have taken to clean the data:  
+1- Filtered and sorted the data to see if there is any blanks or errors. I found blanks in the following columns:  start_station_name, start_station_id, end_station_name, end_station_id.  
+2- Checked if there are any duplicates, I used the option available on Excel as follow: Data > Remove duplicates. I have found no duplicates.  
 
-3- Created a column called ride_length, which calculates the length of each ride by subtracting the column “started_at” from the column “ended_at” and formatted as HH:MM:SS using Format > Cells > Time > 37:30:55. 
-4- Created a column called “day_of_week” and extracted the day of the week (for example, Saturday) that each ride started, using the “TEXT” command (for example, =TEXT(F2, "dddd")) in each file.
-5- Created a column called “ride_month” and extracted the month where each ride started, using the “TEXT” command (for example, =TEXT(F2, "m")) in each file. 
-6- Created a column called “ride_starting_date” and extracted the date where each ride started, using the started_at column formatted as DATE, Format > Cells > Date > 14/3/2012.
-7- Deleted a couple of columns that I am not going to use in my analysis.
+3- Created a column called ride_length, which calculates the length of each ride by subtracting the column “started_at” from the column “ended_at” and formatted as HH:MM:SS using Format > Cells > Time > 37:30:55.   
+4- Created a column called “day_of_week” and extracted the day of the week (for example, Saturday) that each ride started, using the “TEXT” command (for example, =TEXT(F2, "dddd")) in each file.  
+5- Created a column called “ride_month” and extracted the month where each ride started, using the “TEXT” command (for example, =TEXT(F2, "m")) in each file.   
+6- Created a column called “ride_starting_date” and extracted the date where each ride started, using the started_at column formatted as DATE, Format > Cells > Date > 14/3/2012.  
+7- Deleted a couple of columns that I am not going to use in my analysis.  
 
 This is how my Excel file looks like following the data processing that I have made for each file.
 
