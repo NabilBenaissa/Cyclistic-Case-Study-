@@ -137,7 +137,8 @@ FROM
 
 WHERE  ride_length_minutes > 0
      AND ride_length_minutes < 1440
-    ```
+
+```
 
 Here, I used the AVG function to calculate the average ride length in minutes for all riders in 2022, as well as members and casuals. The result is rounded to the nearest integer using the ROUND function and then cast to an INT64 data type. I used the FORMAT function to format the integer value as a string with no decimal places.   
 
@@ -152,6 +153,7 @@ The result of this query is that the average ride length for all riders is 16 mi
 
 In this query, I want to know the total number of trips per season, by rider type (member or casual) and their percentages.
 
+```
 
 SELECT
  season,
@@ -184,6 +186,7 @@ ORDER BY
    WHEN 'summer' THEN 3
    WHEN 'fall' THEN 4
  END
+
  ```
 
 First, I used a subquery to create a table with a season column based on the ride_month column in my table. It assigns each ride to a season based on the ride month, with December through February assigned to winter, March through May assigned to spring, June through August assigned to summer, and September through November assigned to fall.
