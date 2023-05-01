@@ -40,7 +40,7 @@ I am a key part of my marketing director's ambition, which is to design a market
 The business task that was assigned to me is to better understand how casual riders and annual members use Cyclistic bikes differently. That’s why I will be analyzing the Cyclistic historical bike trip data to identify trends and insights that will help to design an effective marketing strategy.
 
 ## Preparing the Data
-In order to analyze the data, I have to prepare it first. I have chosen to analyze the datasets of the year 2022, which total 12 datasets (January 2022 - December 2022). The data is public (available here) and has been made available by Motivate International Inc under this license. 
+In order to analyze the data, I have to prepare it first. I have chosen to analyze the datasets of the year 2022, which total 12 datasets (January 2022 - December 2022). The data is public, available [here](https://divvy-tripdata.s3.amazonaws.com/index.html) and has been made available by Motivate International Inc under this license. 
 The data is structured data, organized in more than 5 million rows (records) and 13 columns (fields). Each record represents one trip, and each trip has a unique field that identifies it, named ride_id. 
 
 Regarding bias and credibility, all the datasets are ROCCC:
