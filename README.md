@@ -1,6 +1,6 @@
 # Cyclistic Case Study
 
-<img width="111" alt="Screen Shot 2023-04-30 at 15 02 09" src="https://user-images.githubusercontent.com/123103268/235378117-491430f3-e349-4637-9dd7-7d61e5effc24.png">
+<img width="108" alt="Screen Shot 2023-04-30 at 15 02 09" src="https://user-images.githubusercontent.com/123103268/235378117-491430f3-e349-4637-9dd7-7d61e5effc24.png">
 
 
 ## Introduction
@@ -30,9 +30,8 @@ Some useful information about Cyclistic:
 - Our pricing plans:
     Single-ride passes.
     Full-day passes.
-    Annual memberships.
-    
-We offer three types of bikes: electric, classic and docked. 
+    Annual memberships.    
+ - We offer three types of bikes: electric, classic and docked. 
 
 ## The Business Task
 
@@ -52,15 +51,21 @@ Regarding bias and credibility, all the datasets are ROCCC:
 However, it is important to note that data-privacy issues prohibit me from using riders’ personally identifiable information. This means that I won’t be able to connect pass purchases to credit card numbers to determine if casual riders live in the Cyclistic service area or if they have purchased multiple single passes. 
 
 ## Processing the Data 
-Now that I have my data prepared, it’s time to clean it and organize it in order to analyze it effectively. This step is called data processing in the data analysis cycle. I will process the data in Microsoft Excel and Google BigQuery.
+Now that I have my data prepared, it’s time to clean it and organize it in order to analyze it effectively. This step is called data processing in the data analysis cycle. I will process the data in Microsoft Excel and Google BigQuery.  
 
 Data processing on Excel:
 First, I downloaded the 12 datasets of the year 2022, unzipped the files, and created a folder on my desktop to house the files using appropriate file-naming conventions. 
 
-Then, I opened each .CSV file on Microsoft Excel 365, saved the file as an Excel Workbook file, and cleaned the data.
+<img width="633" alt="Screen Shot 2023-04-30 at 23 46 02" src="https://user-images.githubusercontent.com/123103268/235432233-9a8ca91c-78e3-47d1-b922-cad69e4f4a85.png">
+
+
+Then, I opened each .CSV file on Microsoft Excel 365, saved the file as an Excel Workbook file, and cleaned the data.  
+
 Below, you will find the steps that I have taken to clean the data:  
 1- Filtered and sorted the data to see if there is any blanks or errors. I found blanks in the following columns:  start_station_name, start_station_id, end_station_name, end_station_id.  
-2- Checked if there are any duplicates, I used the option available on Excel as follow: Data > Remove duplicates. I have found no duplicates.  
+2- Checked if there are any duplicates, I used the option available on Excel as follow: Data > Remove duplicates. I have found no duplicates. 
+
+<img width="255" alt="Screen Shot 2023-04-30 at 20 57 35" src="https://user-images.githubusercontent.com/123103268/235432316-bf3f94b1-c171-4dc9-ad26-4674a4175502.png">
 
 3- Created a column called ride_length, which calculates the length of each ride by subtracting the column “started_at” from the column “ended_at” and formatted as HH:MM:SS using Format > Cells > Time > 37:30:55.   
 4- Created a column called “day_of_week” and extracted the day of the week (for example, Saturday) that each ride started, using the “TEXT” command (for example, =TEXT(F2, "dddd")) in each file.  
@@ -70,17 +75,25 @@ Below, you will find the steps that I have taken to clean the data:
 
 This is how my Excel file looks like following the data processing that I have made for each file.
 
+<img width="630" alt="Screen Shot 2023-04-30 at 23 46 12" src="https://user-images.githubusercontent.com/123103268/235432436-a96a9ed8-7ecc-412c-ade9-f9031df1f3ce.png">
+
 After that, I saved the files again as .CSV in order to process them on Bigquery. At this point, I created 3 subfolders.
 
 Data processing on BigQuery:
 1- Created a bucket in Google Cloud Storage where I uploaded the 12 files in .CSV format. 
 2- Created a project in BigQuery and uploaded these files as datasets.
 
+<img width="272" alt="Screen Shot 2023-04-30 at 23 46 31" src="https://user-images.githubusercontent.com/123103268/235432506-061903bd-715b-46d7-a5f0-a63fbecffa2b.png">
+
 3- Aggregated all the datasets into one table using the UNION ALL function (You can find my SQL queries in this link). The result was a table of more than 5.6 million rows.
 
+<img width="684" alt="Screen Shot 2023-04-30 at 23 46 57" src="https://user-images.githubusercontent.com/123103268/235432549-8fbc7ec3-5f94-4225-81ae-f021f1c60e31.png">
+
 ## Analyzing the Data 
+
 After successfully preparing the datasets, cleaning them, organizing and aggregating them into one table, now it is time to start analyzing the data. 
-I am going to do the analysis using SQL in BigQuery as it is a useful tool for large datasets (the data has more than  5 million rows).
+I am going to do the analysis using SQL in BigQuery as it is a useful tool for large datasets (the data has more than  5 million rows).  
+
 Below, you’ll find the queries that I used in order to find trends and insights that will help me come up with recommendations. 
 
 ### Number of Rides 
@@ -104,12 +117,17 @@ FROM
  )
  ```
 
-This query uses a subquery to retrieve the data from my table, using the COUNT and COUNTIF functions, in order to calculate the total number of rides taken in 2022, as well as the number of rides taken by members and casuals, respectively. 
-Then, the main query uses the results from the subquery to calculate the percentage of rides taken by each rider type. The ROUND function is used to round the percentage to two decimal places.
+This query uses a subquery to retrieve the data from my table, using the COUNT and COUNTIF functions, in order to calculate the total number of rides taken in 2022, as well as the number of rides taken by members and casuals, respectively.  
+
+Then, the main query uses the results from the subquery to calculate the percentage of rides taken by each rider type. The ROUND function is used to round the percentage to two decimal places.  
+
 The result is that Cyclistic has summed more than 5 million rides, 59% of them were used by annual members and 41% by casual riders. 
 
 ### Average Ride Length
+
 In this query, I want to gain insight into the average ride length for all riders in 2022, as well as the average ride length for members and casuals. 
+
+```
 SELECT
  FORMAT('%d', CAST(ROUND(AVG(ride_length_minutes), 0) AS INT64)) AS AvgRideLength,
  FORMAT('%d', CAST(ROUND(AVG(CASE WHEN member_casual = 'member' THEN ride_length_minutes END), 0) AS INT64)) AS AvgRideLengthForMembers,
@@ -119,13 +137,22 @@ FROM
 
 WHERE  ride_length_minutes > 0
      AND ride_length_minutes < 1440
+    ```
 
-Here, I used the AVG function to calculate the average ride length in minutes for all riders in 2022, as well as members and casuals. The result is rounded to the nearest integer using the ROUND function and then cast to an INT64 data type. I used the FORMAT function to format the integer value as a string with no decimal places. 
-It is important to note that the data has some imperfections, where I found rides running for days. I assume that this is an error, and I aimed to correct it by introducing the WHERE clause, which filters out any rides with a negative length, or any ride length greater than or equal to 1440 minutes (equivalent to one day). This prevents skewing the average ride length. 
+Here, I used the AVG function to calculate the average ride length in minutes for all riders in 2022, as well as members and casuals. The result is rounded to the nearest integer using the ROUND function and then cast to an INT64 data type. I used the FORMAT function to format the integer value as a string with no decimal places.   
+
+It is important to note that the data has some imperfections, where I found rides running for days. I assume that this is an error, and I aimed to correct it by introducing the WHERE clause, which filters out any rides with a negative length, or any ride length greater than or equal to 1440 minutes (equivalent to one day). This prevents skewing the average ride length.
+
 The result of this query is that the average ride length for all riders is 16 minutes, whereas the average ride length for members is 13 minutes and casuals is 22 minutes.
 
+<img width="634" alt="Screen Shot 2023-04-30 at 21 44 36" src="https://user-images.githubusercontent.com/123103268/235432785-9b74adcc-98d3-4976-aa86-bf6922400920.png">
+
+
 ### Seasons
+
 In this query, I want to know the total number of trips per season, by rider type (member or casual) and their percentages.
+
+
 SELECT
  season,
  COUNT(*) AS total_trips,
@@ -157,15 +184,23 @@ ORDER BY
    WHEN 'summer' THEN 3
    WHEN 'fall' THEN 4
  END
+ ```
 
 First, I used a subquery to create a table with a season column based on the ride_month column in my table. It assigns each ride to a season based on the ride month, with December through February assigned to winter, March through May assigned to spring, June through August assigned to summer, and September through November assigned to fall.
+
 After that, the outer query groups the data by season using the GROUP BY clause. It calculates the total number of trips for each season using the COUNT function, and the percentage of total trips for each season using a subquery that counts the total number of trips in the entire table and divides the season's trip count by this total. The CONCAT function is used to format the percentage value with the percentage sign.
+
 Also, I used the COUNTIF function to count the number of trips by rider type for each season, then calculates the percentage of member and casual trips for each season by dividing the member or casual trip count by the total trip count for that season. 
+
 Finally, the query orders the results by season in chronological order using a CASE statement that assigns a numerical value to each season based on the order they appear in the year. 
+
 The result of this query shows that the busiest season is summer and that the number of casual riders using our bikes increases tremendously in the summer, compared to the winter season. This query offered me valuable insights, that I am going to use in one of my recommendations. 
 
 ### Months
+
 By running the query below, I want to get insights on the number of rides per month for each rider type.  
+
+```
 SELECT
  ride_month,
  TotalRidesPerMonthIn2022,
@@ -184,12 +219,17 @@ FROM
  GROUP BY ride_month
  ORDER BY ride_month asc
  )
+ ```
 
-Like in most of my queries, I used a subquery here to retrieve the data from my table, using the COUNT and COUNTIF functions, in order to calculate the monthly total number of rides, as well as the monthly number of rides taken by members and casuals. I used the GROUP BY clause to group the results by month, and the ORDER BY clause to sort the results in ascending order (January to Decembre).  
+Like in most of my queries, I used a subquery here to retrieve the data from my table, using the COUNT and COUNTIF functions, in order to calculate the monthly total number of rides, as well as the monthly number of rides taken by members and casuals. I used the GROUP BY clause to group the results by month, and the ORDER BY clause to sort the results in ascending order (January to December).  
+
 The result shows that the total number of rides increases in the warm month (Mai to September) and drops down in the coldest months (November to February). Interestingly, casual riders' bike usage nearly equals its members' counterparts during the summertime, which means that there is an opportunity here to convert casuals to members, which I will discuss in my recommendations.
 
 ### Day of the Week
+
 I designed the query below in order to know what are the busiest days of the week, and how weekdays compare to weekends, broken down by rider type. 
+
+```
 SELECT
  day_of_week,
  COUNT(*) AS total_trips,
@@ -215,14 +255,17 @@ ORDER BY
    WHEN 'Friday' THEN 6
    WHEN 'Saturday' THEN 7
  END
-
-
+```
 
 In this query, I use the CASE statement to order the results of my query following the specific order of the days of the week (Example: Sunday - Monday - to Saturday). Otherwise, It will order my query in alphabetical order, which is not the order that I am seeking. Thus, I assigned a numerical value to each day of the week, the value 1 was assigned to Sunday, 2 to Monday, 3 to Tuesday, and so on up to 7 for Saturday.
+
 The result of this query returns that Saturday is the most popular day for both annual members and casual riders. This query reveals, also, that annual members aggregate the most trips during the weekdays, while casual riders bike more on weekends. My hypothesis is that members use mostly our bikes for commuting to work or school, while casuals use our bikes for leisure and some of them to commute as well.
 
 ### Hours
+
 By performing the query below, I want to get insights about the busiest time of the day, broken down by rider type. 
+
+```
 SELECT
  EXTRACT(hour FROM started_at) AS hour,
  COUNT(*) AS total_trips,
@@ -238,12 +281,18 @@ FROM
 GROUP BY hour
 
 ORDER BY hour
+```
 
 In this query, I use the EXTRACT function to extract the hour from the started_at timestamp column, and grouping the results by that hour.
 The COUNT(*) function is used to count the total number of trips for each hour, and the COUNTIF function is to count the number of trips for each rider type (member or casual) for each hour. The CONCAT function is used to concatenate the percentage values as strings with a '%' symbol, and ROUND is used to round the percentages to two decimal places. The ORDER BY clause is added to sort the results in ascending order by the hour of the day.
+
 The result of this query shows that trips pick up around 8 a.m. and 5 p.m. 
-Bike Types
+
+### Bike Types
+
 I designed this query in order to know more about how members and casual riders use the different types of bikes that we offer. 
+
+```
 SELECT
  rideable_type,
  COUNT(*) AS trip_count,
@@ -255,52 +304,72 @@ GROUP BY
  rideable_type
 ORDER BY
  trip_count desc 
+ ```
 
-I used the CAST function to FLOAT64 data type in order to get a whole percent number.  
+I used the CAST function to FLOAT64 data type in order to get a whole percent number.
+
 The result of this query shows that electric bikes are the most solicited type of bike by members and casuals. Interestingly, docked bikes are only used by casuals, which comforts my hypothesis that this type of rider uses our bikes for leisure.
 
 ## Sharing the Data
+
 Now that I have performed the analysis and gained some insights into my data, it’s time to create visualizations to share my findings. In this step, I am going to use Tableau as a data visualization tool. 
+
 To perform data visualizations that portray the analysis that I have done previously, I saved all my queries as views in Google BigQuery in order to connect them to Tableau and use them as data sources to produce graphs out of them (On Tableau, there is an in-built option to connect to Google BigQuery). 
 
 ### By number of trips 
 
+<img width="469" alt="Screen Shot 2023-04-30 at 11 16 54" src="https://user-images.githubusercontent.com/123103268/235431387-3ec8d356-ad18-4fe6-9e4d-498db9b22584.png">
+
 In this pie chart, we can see that annual members account for 59% of all our company’s bike trips, while casuals represent 41%. This is good news, as we have the opportunity to implement our marketing strategy on a large set of riders, and hopefully convert some of them to members. 
-By Season
+
+### By season
+
+<img width="639" alt="Screen Shot 2023-04-30 at 11 17 00" src="https://user-images.githubusercontent.com/123103268/235431807-a79507bc-095a-4284-ae0c-08761997b40c.png">
 
 As we can notice in this horizontal bar chart, summer is the busiest season for bike trips, while winter is the least sollicited season for our bikes. This is logical because bike riding is better suited for warm weather. I think this is great insight, as it tells us that it's wiser to start our advertising campaign in early spring.
 
-### By Month
+### By month
+
+<img width="516" alt="Screen Shot 2023-04-30 at 11 17 08" src="https://user-images.githubusercontent.com/123103268/235431574-3425b527-1b1c-450b-aed6-32ae877055d2.png">
 
 We can see in this side by side bar that the busiest months go from May to October, then the number of trips drop significantly during the cold months (November to February).
+
 Also, we can notice that the difference of usage between members and casuals tightens around summer time. This can be explained by the fact that the bike rides is heavily used for leisure when the weather is warm. On the opposite, during the cold months, casuals don't use our bikes that much.
-Day of the Week 
+
+### By day of the Week 
+
+<img width="488" alt="Screen Shot 2023-04-30 at 11 17 15" src="https://user-images.githubusercontent.com/123103268/235431714-c6247646-98ff-4f47-be3f-76b83a235171.png">
 
 As we can notice, members favor riding during weekdays, while casuals prefer weekends. My hypothesis is that members use our bikes to commute, while casuals use it for leisure. But not all casuals use our bike for entertainement, as we can in the graph above, there is a consistent number of casuals who use our bikes during the weekdays. This the category of riders that we should traget in our marketing strategy, as they exhibit the same riding habits as members. 
-Hour
+
+### By hour
+
+<img width="442" alt="Screen Shot 2023-04-30 at 11 17 20" src="https://user-images.githubusercontent.com/123103268/235431855-db3e4c2a-b72e-4043-bd98-0fe1e38df113.png">
 
 In this area chart, we can see that casuals mainly use bikes starting at noon to the end of the evening, while members use mainly our bikes between 8 a.m. and 7 p.m. 
+
 ### By bike type preferences
 
+<img width="396" alt="Screen Shot 2023-04-30 at 10 52 24" src="https://user-images.githubusercontent.com/123103268/235431873-8b4b68dd-9ce8-4176-b153-28f9947675cb.png">
+
 Both electric and classic bikes are used heavily by riders. However, the docked bike represent just 3% of the total number of rides in 2022.
-Bike type used
 
+### By bike type used
 
-
-
-
-
-
+<img width="419" alt="Screen Shot 2023-04-30 at 11 25 53" src="https://user-images.githubusercontent.com/123103268/235431904-059a0595-bfb2-4b41-b71b-ad270a4b799c.png">
 
 Annual members use mainly electric and classic bikes, while casuals use the three types of bikes that we offer.
 
 ## Acting on the Findings
-Based on the analysis of the Cyclystic data, it's evident that casual riders not only use our bikes for leisure, but some of them use them to commute as well, as members do. This is the category of casual riders that we should target aggressively in order to convert them to annual members, as they exhibit the same riding habits as our members. 
-For instance, if a casual rider rides for roughly 13 minutes, bikes consistently on weekdays, in the winter, during regular commuting hours, and visits one of the stations most frequently visited by members, then there's a high probability that this rider would benefit from an annual membership. 
+
+Based on the analysis of the Cyclystic data, it's evident that casual riders not only use our bikes for leisure, but some of them use them to commute as well, as members do. This is the category of casual riders that we should target aggressively in order to convert them to annual members, as they exhibit the same riding habits as our members.  
+
+For instance, if a casual rider rides for roughly 13 minutes, bikes consistently on weekdays, in the winter, during regular commuting hours, and visits one of the stations most frequently visited by members, then there's a high probability that this rider would benefit from an annual membership.  
+
 To sum up, those are my recommendations:  
-Introducing a weekend annual membership, as casual riders use our bikes more on Saturdays and Sundays.
-Advertizing more on the advantages of our bikes as a useful form of transportation to commute. This may create an awareness effect in casual riders, therefore invest in an annual membership to use our bikes to commute.
-Investing a little in docked bikes, and relocating our investments on the other popular types, electric and classic bikes.
+1- Introducing a weekend annual membership, as casual riders use our bikes more on Saturdays and Sundays.  
+2- Advertizing more on the advantages of our bikes as a useful form of transportation to commute. This may create an awareness effect in casual riders, therefore invest in an annual membership to use our bikes to commute.  
+3- Investing a little in docked bikes, and relocating our investments on the other popular types, electric and classic bikes.
 
 
 
