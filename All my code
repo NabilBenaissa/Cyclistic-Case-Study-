@@ -1,26 +1,4 @@
-Here, I added all the SQL code made on BigQuery prior to the analysis phase. 
-
--- changing the data type from TIME to STRING for the columns ride_starting_time, ride_ending_time, ride_length for months 7 8 9 10 11 12.
--- as in the first 6 months 
-
-
-SELECT  
-  ride_id, 
-  rideable_type, 
-  member_casual,
-  started_at, 
-  ended_at, 
-  ride_starting_date,
-  ride_month,
-  day_of_week,
-  CAST(ride_starting_time AS STRING) AS ride_starting_time, 
-  CAST(ride_ending_time AS STRING) AS ride_ending_time, 
-  CAST(ride_length AS STRING) AS ride_length
-       
-FROM `myfirstprojectweek3-378015.cyclistic.202207-divvy-tripdata`
-	
-
---join all tables into one UNION ALL
+Here, I added all the SQL code created on BigQuery to join all the 12 monthly datasets into one table using the UNION ALL. 
 
 SELECT  
   ride_id, 
@@ -223,21 +201,4 @@ SELECT
   ride_length
 
 FROM `myfirstprojectweek3-378015.cyclistic.202212-divvy-tripdataa`
-  
-
--- used it to create a new table with ride_length_minutes instead of the last one with ride_length that didn't work well for me
-SELECT   
-  ride_id, 
-  rideable_type, 
-  member_casual,
-  CAST(TIMESTAMP_DIFF(ended_at, started_at, second)/60 AS INT64) AS ride_length_minutes,
-  started_at, 
-  ended_at, 
-  ride_starting_date,
-  ride_month,
-  day_of_week,
-
-FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables2`
-ORDER BY ride_length_minutes DESC
-
-```
+ 
