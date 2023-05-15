@@ -1,0 +1,349 @@
+Here, I added all the SQL code that I have used in this case study. The SQL code was made in Google BigQuery.  
+
+0/ The UNION ALL function to join all the 12 datasets related to each month into one big table.
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202201-divvy-tripdata`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202202-divvy-tripdata`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202203-divvy-tripdat`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202204-divvy-tripdata`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202205-divvy-tripdata`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202206-divvy-tripdata`
+
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202207-divvy-tripdataa`
+  
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202208-divvy-tripdataa`
+  
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202209-divvy-tripdataa`
+  
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202210-divvy-tripdataa`
+  
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202211-divvy-tripdataa`
+  
+UNION ALL
+
+SELECT  
+  ride_id, 
+  rideable_type, 
+  member_casual,
+  started_at, 
+  ended_at, 
+  ride_starting_date,
+  ride_month,
+  day_of_week,
+  ride_starting_time, 
+  ride_ending_time, 
+  ride_length
+
+FROM `myfirstprojectweek3-378015.cyclistic.202212-divvy-tripdataa`
+
+1/ Query to analyze the number of rides
+
+SELECT
+ TotalRidesIn2022,
+ TotalRidesForMembers,
+ TotalRidesForCasuals,
+ ROUND((TotalRidesForMembers/ TotalRidesIn2022), 2)*100 AS MemberPerc,
+ ROUND((TotalRidesForCasuals/ TotalRidesIn2022), 2)*100 AS CasualPerc
+
+FROM
+ (
+ SELECT 
+ COUNT(ride_id) AS TotalRidesIn2022,
+ COUNTIF(member_casual = 'member') AS TotalRidesForMembers,
+ COUNTIF(member_casual = 'casual') AS TotalRidesForCasuals,
+ FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+ )
+
+
+2/ Query to analyze the average ride length
+
+SELECT
+ FORMAT('%d', CAST(ROUND(AVG(ride_length_minutes), 0) AS INT64)) AS AvgRideLength,
+ FORMAT('%d', CAST(ROUND(AVG(CASE WHEN member_casual = 'member' THEN ride_length_minutes END), 0) AS INT64)) AS AvgRideLengthForMembers,
+ FORMAT('%d', CAST(ROUND(AVG(CASE WHEN member_casual = 'casual' THEN ride_length_minutes END), 0) AS INT64)) AS AvgRideLengthForCasuals
+FROM
+ `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+
+WHERE  ride_length_minutes > 0
+     AND ride_length_minutes < 1440
+3/ Query to analyze the cyslistic trips by season
+
+SELECT
+ season,
+ COUNT(*) AS total_trips,
+ CONCAT(ROUND((COUNT(*) / (SELECT COUNT(*) FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`)) * 100), '%') AS total_perc,
+ COUNTIF(member_casual = 'member') AS member_trips,
+ COUNTIF(member_casual = 'casual') AS casual_trips,
+ CONCAT(ROUND((COUNTIF(member_casual = 'member') / COUNT(*)) * 100), '%') AS member_perc,
+ CONCAT(ROUND((COUNTIF(member_casual = 'casual') / COUNT(*)) * 100), '%') AS casual_perc
+
+FROM (
+ SELECT
+   CASE
+     WHEN ride_month IN (12, 1, 2) THEN 'winter'
+     WHEN ride_month IN (3, 4, 5) THEN 'spring'
+     WHEN ride_month IN (6, 7, 8) THEN 'summer'
+     ELSE 'fall'
+   END AS season,
+   member_casual
+ FROM
+   `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+)
+GROUP BY
+ season
+
+ORDER BY
+ CASE season
+   WHEN 'winter' THEN 1
+   WHEN 'spring' THEN 2
+   WHEN 'summer' THEN 3
+   WHEN 'fall' THEN 4
+ END
+4/ Query to analyze the cyslistic trips by month
+
+SELECT
+ ride_month,
+ TotalRidesPerMonthIn2022,
+ MonthlyRidesForMembers,
+ MonthlyRidesForCasuals,
+ CONCAT(ROUND((MonthlyRidesForMembers/ TotalRidesPerMonthIn2022), 2)*100, '%') AS MemberPerc,
+ CONCAT(ROUND((MonthlyRidesForCasuals/ TotalRidesPerMonthIn2022), 2)*100, '%') AS CasualPerc
+FROM
+ (
+ SELECT
+ ride_month, 
+ COUNT(ride_id) AS TotalRidesPerMonthIn2022,
+ COUNTIF(member_casual = 'member') AS MonthlyRidesForMembers,
+ COUNTIF(member_casual = 'casual') AS MonthlyRidesForCasuals,
+ FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+ GROUP BY ride_month
+ ORDER BY ride_month asc
+ )
+5/ Query to analyze the cyslistic trips by the day of the week
+
+SELECT
+ day_of_week,
+ COUNT(*) AS total_trips,
+ CONCAT(ROUND((COUNT(*) / (SELECT COUNT(*) FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`)) * 100), '%') AS total_perc,
+ COUNTIF(member_casual = 'member') AS member_trips,
+ COUNTIF(member_casual = 'casual') AS casual_trips,
+ CONCAT(ROUND((COUNTIF(member_casual = 'member') / COUNT(*)) * 100), '%') AS member_perc,
+ CONCAT(ROUND((COUNTIF(member_casual = 'casual') / COUNT(*)) * 100), '%') AS casual_perc
+  
+FROM
+   `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+
+GROUP BY
+ day_of_week
+
+ORDER BY
+ CASE day_of_week
+   WHEN 'Sunday' THEN 1
+   WHEN 'Monday' THEN 2
+   WHEN 'Tuesday' THEN 3
+   WHEN 'Wednesday' THEN 4
+   WHEN 'Thursday' THEN 5
+   WHEN 'Friday' THEN 6
+   WHEN 'Saturday' THEN 7
+ END
+6/ Query to analyze the cyslistic trips by hours during the day 
+
+SELECT
+ EXTRACT(hour FROM started_at) AS hour,
+ COUNT(*) AS total_trips,
+ CONCAT(ROUND((COUNT(*) / (SELECT COUNT(*) FROM `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`)) * 100), '%') AS total_perc,
+ COUNTIF(member_casual = 'member') AS member_trips,
+ COUNTIF(member_casual = 'casual') AS casual_trips,
+ CONCAT(ROUND((COUNTIF(member_casual = 'member') / COUNT(*)) * 100), '%') AS member_perc,
+ CONCAT(ROUND((COUNTIF(member_casual = 'casual') / COUNT(*)) * 100), '%') AS casual_perc
+  
+FROM
+   `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+
+GROUP BY hour
+
+ORDER BY hour
+7/ Query to analyze the cyslistic trips by bike types
+
+SELECT
+ rideable_type,
+ COUNT(*) AS trip_count,
+ CAST(ROUND((COUNTIF(member_casual = 'member') / COUNT(*)) * 100) AS FLOAT64) AS member_perc,
+ CAST(ROUND((COUNTIF(member_casual = 'casual') / COUNT(*)) * 100) AS FLOAT64) AS casual_perc
+FROM
+   `myfirstprojectweek3-378015.cyclistic.2022_global_tables21`
+GROUP BY
+ rideable_type
+ORDER BY
+ trip_count desc 
+
+
+ 
