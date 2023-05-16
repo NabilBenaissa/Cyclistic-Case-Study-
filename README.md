@@ -343,7 +343,7 @@ Also, we can notice that the difference of usage between members and casuals tig
 
 <img width="488" alt="Screen Shot 2023-04-30 at 11 17 15" src="https://user-images.githubusercontent.com/123103268/235431714-c6247646-98ff-4f47-be3f-76b83a235171.png">
 
-As we can notice, members favor riding during weekdays, while casuals prefer weekends. My hypothesis is that members use our bikes to commute, while casuals use it for leisure. But not all casuals use our bike for entertainement, as we can in the graph above, there is a consistent number of casuals who use our bikes during the weekdays. This the category of riders that we should traget in our marketing strategy, as they exhibit the same riding habits as members. 
+As we can notice, members favor riding during weekdays, while casuals prefer weekends. My hypothesis is that members use our bikes to commute, while casuals use them for leisure. But not all casuals use our bikes for entertainment, as we can see in the graph above, there is a consistent number of casuals who use our bikes during the weekdays. This is the category of riders that we should target in our marketing strategy, as they exhibit the same riding habits as members. 
 
 ### By hour
 
